@@ -8,11 +8,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.biz4up.bizsalad.UserVO;
+import com.biz4up.bizsalad.persistence.OrderDAO;
 import com.biz4up.bizsalad.persistence.UserDAO;
 
 import ch.qos.logback.classic.Logger;
@@ -24,6 +26,8 @@ public class MainController {
 	
 	@Autowired
 	UserDAO dao;
+	@Autowired
+	OrderDAO oDao;
 	/*
 	@Autowired
 	BCryptPasswordEncoder passEncoder;
@@ -33,7 +37,21 @@ public class MainController {
    	
         return "index";
     }
-
+    @RequestMapping(value="/kongjeong")
+    public String kongjeong(String _key, Model model)throws Exception {
+    	Criteria cri=new Criteria();
+    	model.addAttribute("list", oDao.list(cri));
+    	System.out.println(oDao.list(cri));
+    	return "kongjeong";
+    }
+    
+    @RequestMapping("/order/list")	//보완 필요
+    @ResponseBody
+    public void orderList(Model model)throws Exception {
+    	Criteria cri=new Criteria();
+    	oDao.list(cri); 
+    }
+    
     @RequestMapping(value="/login")
     public String login() {
    	
